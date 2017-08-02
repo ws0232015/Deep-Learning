@@ -1,3 +1,1 @@
-{% raw %}
-$$\sigma$$
-{% endraw %}
+
