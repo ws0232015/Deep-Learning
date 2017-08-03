@@ -35,7 +35,7 @@ w and x are vectors for weights and inputs.
 ![My Formula](http://latex.codecogs.com/gif.latex?b\equiv{-threshold})     
 b is perceptron's bias
 
-![My Formula](http://latex.codecogs.com/gif.latex?{output}=\{^{0\quad%20ifw\cdotx+b\leq0}_{1\quad%20ifw\cdotx+b%3E0})       
+![My Formula](http://latex.codecogs.com/gif.latex?{output}={\{}^{0\quad%20ifw\cdotx+b\leq0}_{1\quad%20ifw\cdotx+b%3E0})       
 
 NAND, not AND:      
 A perceptron with weights -2, -2 and a bias 3:
