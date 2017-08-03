@@ -4,5 +4,11 @@ Learning notes
 
 # NN & DL
 
+## Ch 1
+
+### Using NN to recognize handwritten
+
+#### Percetron
+
 
 ![My Formula](http://latex.codecogs.com/gif.latex?\sigma)
