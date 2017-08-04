@@ -5,6 +5,10 @@
 .Rapp.history
 .ipynb_checkpoints
 Deep-Learning.Rproj
+visio
+*.idx3-ubyte
+*.idx1-ubyte
+*.pyc
 
 # Session Data files
 .RData
