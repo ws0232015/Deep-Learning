@@ -9,6 +9,7 @@ visio
 *.idx3-ubyte
 *.idx1-ubyte
 *.pyc
+__pycache__
 
 # Session Data files
 .RData
