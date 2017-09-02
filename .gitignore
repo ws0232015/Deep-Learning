@@ -4,6 +4,8 @@
 .Rhistory
 .Rapp.history
 .ipynb_checkpoints
+.vsdx
+vsdx
 Deep-Learning.Rproj
 visio
 *.idx3-ubyte
