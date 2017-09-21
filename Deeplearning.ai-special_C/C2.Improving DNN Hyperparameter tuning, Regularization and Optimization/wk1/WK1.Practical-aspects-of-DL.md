@@ -3,6 +3,24 @@
 Cite from the [coursera] named [Neural network and Machine Learning] from [deeplearning.ai]<br>
 Learning notes<br>
 
+- [Setting up your ML app.](#setting-up-your-ml-app)
+    - [Train / Dev / Test sets](#train-dev-test-sets)
+    - [Bias and Variance](#bias-and-variance)
+    - [Basic "recipe" for ML](#basic-recipe-for-ml)
+- [Regularizing NN](#regularizing-nn)
+    - [Regularization](#regularization)
+    - [Why regularizationg reduces overfitting](#why-regularizationg-reduces-overfitting)
+    - [Dropout regularization](#dropout-regularization)
+    - [Understanding Dropout](#understanding-dropout)
+    - [Other regularization methods](#other-regularization-methods)
+- [Setting up optimization problem](#setting-up-optimization-problem)
+    - [Normalizaing inputs](#normalizaing-inputs)
+    - [Vanishing / Exploding gradients](#vanishing-exploding-gradients)
+    - [Weight initialization for Deep nets.](#weight-initialization-for-deep-nets)
+    - [Numerical approxm. of gradients](#numerical-approxm-of-gradients)
+    - [Gradient checking](#gradient-checking)
+    - [Gradient checking implementating notes](#gradient-checking-implementating-notes)
+
 # Setting up your ML app.
 
 ## Train / Dev / Test sets
@@ -13,7 +31,7 @@ Learning notes<br>
     * learning rates
     * activation
     * etc.
-    
+
 * Train / Dev / Test sets
     * Training set
         * pre: 70%/60%
