@@ -140,5 +140,4 @@ Error on e.g. not trained on | "Training-dev error" 10%| "Dev/test error" 6% (va
 
 * Addressing data mismatch
     * Carry out mamnual error analysis to try to understand difference b/w training and dev/test sets
-    * add
-
+ad
