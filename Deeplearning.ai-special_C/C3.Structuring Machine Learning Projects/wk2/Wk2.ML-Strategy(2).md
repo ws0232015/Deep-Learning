@@ -8,6 +8,7 @@ Learning notes<br>
 - [Mismatched training and dev/test set](#mismatched-training-and-devtest-set)
     - [Training and testing on different distributions](#training-and-testing-on-different-distributions)
     - [Bias and Variance w/ mismatched data distributions](#bias-and-variance-w-mismatched-data-distributions)
+    - [Addressing data mismatch](#addressing-data-mismatch)
 
 # Error Analysis
 
@@ -134,3 +135,10 @@ Image | Dog | Greate cats | Blury | Comment
 human Level |"Human level" 4% | 6%
 Error on e.g. trained on | "Training error" 7% |6% (bias when compare to$\uparrow$) 
 Error on e.g. not trained on | "Training-dev error" 10%| "Dev/test error" 6% (variance when compare to$\uparrow$)(mismatch when compare to$\leftarrow$)
+
+## Addressing data mismatch
+
+* Addressing data mismatch
+    * Carry out mamnual error analysis to try to understand difference b/w training and dev/test sets
+    * add
+
