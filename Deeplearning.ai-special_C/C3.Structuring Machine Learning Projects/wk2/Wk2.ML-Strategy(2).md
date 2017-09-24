@@ -9,6 +9,11 @@ Learning notes<br>
     - [Training and testing on different distributions](#training-and-testing-on-different-distributions)
     - [Bias and Variance w/ mismatched data distributions](#bias-and-variance-w-mismatched-data-distributions)
     - [Addressing data mismatch](#addressing-data-mismatch)
+- [Learning From multiple tasks](#learning-from-multiple-tasks)
+    - [Transfer learning](#transfer-learning)
+    - [Mulri-task learning](#mulri-task-learning)
+- [End-to-end deep learning](#end-to-end-deep-learning)
+    - [What is end-toend-](#what-is-end-toend)
 
 # Error Analysis
 
@@ -140,4 +145,57 @@ Error on e.g. not trained on | "Training-dev error" 10%| "Dev/test error" 6% (va
 
 * Addressing data mismatch
     * Carry out mamnual error analysis to try to understand difference b/w training and dev/test sets
-ad
+        * E.g. mis-car noise
+    * Make training data more similer; or collect more data similar to dev/test sets
+        * e.g. similar noist in-car data
+
+* Artificial data synthesis
+    * sentence + car noise = Synthesized in-car audio
+    * ![img8](imgs/img8.jpg)
+    * ![img9](imgs/img9.jpg)
+
+# Learning From multiple tasks
+
+## Transfer learning
+
+* Transfer learning
+    * ![img10](imgs/img10.jpg)
+    * image recognition 
+    * radiology diagnosis
+    * Speech recognition to wakeword
+    * idaa is transfer from lot of data to small set of data
+* When transfer learning makes sense
+    * task A and B have the same input x
+    * You have a lot more data for Task A than Task B
+    * Low level features from A could be helpful for learning B
+
+## Mulri-task learning
+
+* Simplified autonomous driving e.g.
+    * Pedestrians
+    * cars
+    * stop signs
+    * Traffic lights
+    * etc...
+    * ![img11](imgs/img11.jpg)
+* NN architecture
+    * ![img12](imgs/img12.jpg)
+    * Loss: $\hat{y}^{(i)}=\frac{1}{m}\sum^m_{i=1}\sum^4_{j=1}l(\hat{y}^{(i)}_j,y_j^{(i)})$
+        * use logistic loss
+        * $-y^{(i)}_jlog\hat{y}^{(i)}_j-(1-{y}^{(i)}_j)log(1-\hat{y}^{(i)}_j)$
+    * Unlike softmax regression
+        * one image can have multiple labels
+    * Multi-task learning
+        * ![img13](imgs/img13.jpg)
+        * Sum only on valide label, ignore those ? in Y
+* When multi-task learning makes sense
+    * Training on a set of tasks that could benefit from having shared lower-level features
+    * Usually: Amount of data you have for each task is quite similar
+        * In transfer learning we usually transfer A w/ 1,000,000 to B with 1,000
+        * For multiple $A_1$ with 1000, $A_2$ with 1000, ... $A_99$ with 1000, total 99,000 transfer to $A_100$ with 1000
+        * Can train a big enough NN to do well on all the tasks
+            * like one NN for cat detaction, one for stop sign, etc...
+
+
+# End-to-end deep learning
+## What is end-toend-
