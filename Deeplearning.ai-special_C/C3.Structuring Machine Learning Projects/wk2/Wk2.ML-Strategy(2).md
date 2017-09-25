@@ -13,7 +13,8 @@ Learning notes<br>
     - [Transfer learning](#transfer-learning)
     - [Mulri-task learning](#mulri-task-learning)
 - [End-to-end deep learning](#end-to-end-deep-learning)
-    - [What is end-toend-](#what-is-end-toend)
+    - [What is end-to-end](#what-is-end-to-end)
+    - [Whether to use end-to-end deep learning](#whether-to-use-end-to-end-deep-learning)
 
 # Error Analysis
 
@@ -198,4 +199,42 @@ Error on e.g. not trained on | "Training-dev error" 10%| "Dev/test error" 6% (va
 
 
 # End-to-end deep learning
-## What is end-toend-
+
+## What is end-to-end
+
+* Speech recognition example
+    * (X)Audio $\longrightarrow$(MFCC) Feature $\longrightarrow$(ML) Phnemes $\longrightarrow$ Words $\longrightarrow$ transcript(y)
+    * Audio $\longrightarrow$ Transcript (end-to-end)
+        * much more data will perform will
+* Face recognition
+    * Identity and then zoom-in
+    * ![img14](imgs/img14.jpg)
+    * have data for each of 2 subtask then break it down to sub-problem
+* More examples
+    * Machine translation
+        * English $\longrightarrow$ text analysis $\longrightarrow$ ... $\longrightarrow$ Franch
+        * English $\longrightarrow$ French (end-to-end)
+    * Estimating child's age
+        * Image $\longrightarrow$ bones $\longrightarrow$ age
+            * step 1: bones
+            * step 2: age
+        * Image $\longrightarrow$ age (end-to-end)
+
+## Whether to use end-to-end deep learning
+
+* Pros and cons of end-to-end DL
+    * Pros:
+        * Let the data speak
+            * x $\longrightarrow$ y
+            * "phonemes"
+        * Less hand-designing of components needed
+    * Cons:
+        * May need large amount of data (x,y)
+        * Excludes potentially useful hand-designed components
+            * balance b/w data and hand-design
+* Applying end-to-end DL
+    * Key question: Do you have sufficient data to learn a function of the complexity needed to map x to y?
+    * ![img15](imgs/img15.jpg)
+        * use DL to learn include components
+        * carefully choose X to Y depending on what tasks you can get data for
+        * image $\longrightarrow$ steering (end-to-end)
