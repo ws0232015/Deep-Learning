@@ -36,18 +36,18 @@ Learning notes<br>
 # Why object recognition is difficult
 
 ## Things that make it hard to recognize objects
-* Segmentation: real scenes are cluttered w/ other objects:
+* **_Segmentation_**: real scenes are cluttered w/ other objects:
     * hard to tell which pieces go together as parts of the same object
     * parts of an object can be hidden behind other objects
-* Lighting: The intensities of the pixels are determined as much by the lighting as by the objects
-* Deformation: Objects can deform in a variety of non-affine ways
+* _**Lighting**_: The intensities of the pixels are determined as much by the lighting as by the objects
+* _**Deformation**_: Objects can deform in a variety of non-affine ways
     * e.g. a hand-written 2 can have a large loop or just a cusp
-* Affordances: Object calsses are often defined by how they are used:
+* _**Affordances**_: Object classes are often defined by how they are used:
     * chairs are things designed for sitting on so they have a wide variety of physical shapes
 
 ## More things that make it hard to recognize objects
-* Viewpoint: changes in view point cause changes in images that standard learning methods cannot cope with
-    * Info. hops b/w input dimentions (i.e. pixels)
+* _**Viewpoint**_: changes in view point cause changes in images that standard learning methods cannot cope with
+    * Info. hops b/w input dimensions (i.e. pixels)
     * ![1.jpg](imgs/1.jpg)
 * Imagine a medical database in which the age of a patient sometimes hops to the input dimension that normally codes for weight
     * to apply machine learning would first want to eliminate this dimension-hopping
@@ -61,7 +61,7 @@ Learning notes<br>
 * several different approaches
     * use redundant invariant features
     * put a box around the object and use normalized pixels
-    * Lecture 5c: Use replicated features w/ pooling. This is called "CNN"
+    * [Lecture 5c](#convolutional-neural-networks-for-hand-written-digit-recognition): Use replicated features w/ pooling. This is called "CNN"
     * use a hierarchy of parts that have explicit poses relative to the camera (this will be described in detail later in the course)
 
 ## The invariant feature approach
@@ -110,9 +110,9 @@ Learning notes<br>
 * use $\frac{\partial E}{\partial w_1}+\frac{\partial E}{\partial w_2}$ for $w_1$ and $w_2$
 
 ## What does replicating the feature detectors achieve
-* Equivariant activities: Replicated features do <font color='red'>not</font> make the neural activities invariant to translation. The activities are equivariant
+* _**Equivariant activities**_: Replicated features do <font color='red'>not</font> make the neural activities invariant to translation. The activities are equivariant
 * ![img5](imgs/img5.jpg)
-* Invariant knowledge: if a feature is useful in some locations during training, detectors for that feature will be available in all locations during testing
+* _**Invariant knowledge**_: if a feature is useful in some locations during training, detectors for that feature will be available in all locations during testing
 
 ## Pooling the outputs of replicated feature detectors
 * Get a small amount of translational invariance at each level by averaging four neighboring replicated detectors to give a single output to the next level
@@ -129,7 +129,7 @@ Learning notes<br>
     * A wide net that can cope w/ several characters at once even if they overlap
     * A clever way of training a complete system, not just a recognizer
 * This net was used for reading ~10% of the checks in north america
-* look the impressives demos of LENET at [here](http://yann.lecun.com)
+* look the impressive demos of LENET at [here](http://yann.lecun.com)
 
 ## The architecture of LeNet5
 ![img6](imgs/img6.jpg)
@@ -246,3 +246,4 @@ University of Amsterdam | 29.5% |  |
     * arbitrary decisions about what counts as a road
 * Big neural nets trained on big image patches with millions of examples are the only hope
 * ![img11](imgs/img11.jpg)
+
