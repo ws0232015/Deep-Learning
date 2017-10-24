@@ -16,6 +16,9 @@ Learning notes<br>
     - [A more thorough method: Decorrelate the input components](#a-more-thorough-method-decorrelate-the-input-components)
     - [Common problems that occur in multilayer networks](#common-problems-that-occur-in-multilayer-networks)
     - [4 ways to speed up mini-batch learning](#4-ways-to-speed-up-mini-batch-learning)
+- [The momentum method](#the-momentum-method)
+    - [The intuition behind the momentum method](#the-intuition-behind-the-momentum-method)
+    - [The equations of the momentum method](#the-equations-of-the-momentum-method)
 
 # Overview of mini-batch gradient descent
 
@@ -129,4 +132,22 @@ Learning notes<br>
 - Take a fancy method from the optimization literature that makes use of curvature information (not this lecture)
     - Adapt it to work for NN
     - Adapt it to work for mini-batches
-    - 
+
+# The momentum method
+
+## The intuition behind the momentum method
+- Imagine a ball on the error surface. The location of the ball in the horizontal plane represents the weight vector
+    - the ball starts off by following the gradient, but once it has velocity, it no longer does steepest descent
+    - its momentum makes it keep going in the previous direction
+- it damps oscillations in directions of high curvature by cobining gradients w/ opposite sign
+- it builds up spped in directions w/ a gentle but consistent gradientee
+- ![img7](imgs/img7.jpg)
+
+## The equations of the momentum method
+- $$v(t)=\alpha v(t)-\epsilon\frac{\partial E}{\partial w}(t)$$
+    - The effect of the gradient is to increment the previous velocity. The velocity also decays by $\alpha$ which is slightly less than 1
+- $$\Delta w(t)=v(t)$$
+    - The weight change is equal to the current velocity
+    - $$=\alpha v(t)-\epsilon\frac{\partial E}{\partial w}(t)$$
+    - $$=\alpha \Delta w(t)-\epsilon\frac{\partial E}{\partial w}(t)$$
+        - The weight change can be expressed in terms of the previous weight change and the current gradient
