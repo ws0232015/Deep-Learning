@@ -19,6 +19,19 @@ Learning notes<br>
 - [The momentum method](#the-momentum-method)
     - [The intuition behind the momentum method](#the-intuition-behind-the-momentum-method)
     - [The equations of the momentum method](#the-equations-of-the-momentum-method)
+    - [The behavior of the momentum method](#the-behavior-of-the-momentum-method)
+    - [A better type of momentum](#a-better-type-of-momentum)
+    - [A picture of the Nesterov method](#a-picture-of-the-nesterov-method)
+- [A separate, adaptive learning rate for each connection](#a-separate-adaptive-learning-rate-for-each-connection)
+    - [The intuition behind separate adaptive learning rates](#the-intuition-behind-separate-adaptive-learning-rates)
+    - [One way to determine the individual learning rates](#one-way-to-determine-the-individual-learning-rates)
+    - [Tricks for making adaptive learning rates work better](#tricks-for-making-adaptive-learning-rates-work-better)
+- [rmsprop: Divide the gradient by a running average of its recent magnitude](#rmsprop-divide-the-gradient-by-a-running-average-of-its-recent-magnitude)
+    - [rprop: Using only the sign of the gradient](#rprop-using-only-the-sign-of-the-gradient)
+    - [Why rprop does not work w/ mini-batches](#why-rprop-does-not-work-w-mini-batches)
+    - [rmsprop: A mini-batch version of rprop](#rmsprop-a-mini-batch-version-of-rprop)
+    - [Further developments of rmsprop](#further-developments-of-rmsprop)
+    - [Summary of leaning methods for neural networks](#summary-of-leaning-methods-for-neural-networks)
 
 # Overview of mini-batch gradient descent
 
@@ -54,6 +67,7 @@ Learning notes<br>
     - less computation is used updating the weights
     - computing the gradient for many cases simultaneously uses matrix-matrix multiplies which are very efficient, especially on GPUs
 - Mini-batches need to be balanced for classes
+    - random order and random pick-up
 
 ## Two types of learning algorithm
 - If we use the full gradient computed from all the training cases, there are many clever ways to speed up learning (e.g. non-linear conjugate gradient)
@@ -140,7 +154,7 @@ Learning notes<br>
     - the ball starts off by following the gradient, but once it has velocity, it no longer does steepest descent
     - its momentum makes it keep going in the previous direction
 - it damps oscillations in directions of high curvature by cobining gradients w/ opposite sign
-- it builds up spped in directions w/ a gentle but consistent gradientee
+- it builds up speed in directions w/ a gentle but consistent gradients
 - ![img7](imgs/img7.jpg)
 
 ## The equations of the momentum method
@@ -148,6 +162,120 @@ Learning notes<br>
     - The effect of the gradient is to increment the previous velocity. The velocity also decays by $\alpha$ which is slightly less than 1
 - $$\Delta w(t)=v(t)$$
     - The weight change is equal to the current velocity
-    - $$=\alpha v(t)-\epsilon\frac{\partial E}{\partial w}(t)$$
-    - $$=\alpha \Delta w(t)-\epsilon\frac{\partial E}{\partial w}(t)$$
-        - The weight change can be expressed in terms of the previous weight change and the current gradient
+- $$=\alpha v(t)-\epsilon\frac{\partial E}{\partial w}(t)$$
+- $$=\alpha \Delta w(t)-\epsilon\frac{\partial E}{\partial w}(t)$$
+    - The weight change can be expressed in terms of the previous weight change and the current gradient
+
+## The behavior of the momentum method
+- If the error surface is a tilted plane, the ball reaches a terminal velocity
+    - If the momentum is close to 1, this is much faster than simple gradient descent
+    - $$v(\infty)=\frac{1}{1-\alpha}(-\epsilon\frac{\partial E}{\partial w})$$
+- At the beginning of learning there may be very large gradients
+    - so it pays to use a small momentum (e.g. 0.5)
+    - once the large gradients have disappeared and the weights are stuck in a ravine the momentum can be smoothly raised to its final value (e.g. 0.9 or even 0.99)
+- This allows us to learn at a rate that would cause divergent oscillations w/o the momentum
+
+## A better type of momentum
+- The standard momentum method first computes the gradient at the current location and then takes a big jump in the direction of the updated accumulated gradient
+- Ilya Sutskever (2012) unpublished suggested a new form of momentum that often works better
+    - inspired by the Nesterov method for optimizing convex functions
+- First make a big jump in the direction of the previous accumulated gradient
+- then measure the gradient where you end up and make a correction
+    - its better to correct a mistake after you have made it
+
+## A picture of the Nesterov method
+- First make a big jump in the direction of the previous accumulated gradient
+- Then measure the gradient where you end up and make a correction
+- ![img8](imgs/img8.jpg)
+
+# A separate, adaptive learning rate for each connection
+
+## The intuition behind separate adaptive learning rates
+- In a multilayer net, the appropriate learning rates can vary widely b/w weights:
+    - The magnitudes of the gradients are often very diff. for diff. layers, especially if the initial weights are small
+    - The fan-in of a unit determines the size of the "overshoot" effects caused by simultaneously changing many of the incoming weights of a unit to correct the same error
+- So use a global learning rate (set by hand) multiplied by an appropriate local gain that is determined empirically for each weight
+- ![img9](imgs/img9.jpg)
+    - gradients can get very small in the early layers of very deep nets
+    - the fan-in often varies widely b/w layers
+
+## One way to determine the individual learning rates
+- Start with a local gain of 1 for every weight
+- Increase the local gain if the gradient for that weight does not change sign
+- Use small additive increase and multiplicative decreases (for mini-batch)
+    - this ensures that big gains decay rapidly when oscillations start
+    - if the gradient is totally random the gain will hover around 1 when we increase by plus $\delta$ half the time and decrease by times $1-\delta$ half the time
+    - $$\Delta w_{ij}=-\epsilon g_{ij}\frac{\partial E}{\partial w_{ij}}$$
+    - if $(\frac{\partial E}{\partial w_{ij}}(t)\frac{\partial E}{\partial w_{ij}}(t-1))>0$
+    - then $g_{ij}(t)=g_{ij}(t-1)+0.05$
+    - else $g_{ij}(t)=g_{ij}(t-1)*0.95$
+
+## Tricks for making adaptive learning rates work better
+
+- Limit the gains to lie in some reasonable range
+    - e.g. [0.1, 10] or [.01, 100]
+- Use full batch learning or big mini-batches
+    - This ensures that changes in the sign of the gradient are not mainly due to the sampling error of a mini-batch
+- Adaptive learning rates can be combines w/ momentum
+    - Use the agreement in sign b/w the current gradient for a weight and the velocity for that weight
+- Adaptive learning rates only deal w/ axis-aligned effects
+    - Momentum does not care about the alignment of the axes
+
+# rmsprop: Divide the gradient by a running average of its recent magnitude
+
+## rprop: Using only the sign of the gradient
+- The magnitude of the gradient can be very different for different weights and can change during learning
+    - this makes it hard to choose a single global learning rate
+- For full batch learning, can deal w/ this variation by only using the sign of the gradient
+    - The weight updates are all of the same magnitude
+    - this escapes from plateaus w/ tiny gradients quickly
+- rprop: this combines the idea of only using the sign of the gradient w/ the idea of adapting the step size separately for each weight
+    - increase the step size for a weight multiplicatively (e.g. times 1.2) if the signs of its last two gradients agree
+    - o.w. decrease the step size multiplicatively
+    - limit the step sizes to be less than 50 and more than a millionth
+
+## Why rprop does not work w/ mini-batches
+- the idea behind stochastic gradient descent is that when the learning rate is small, it averages the gradients over successive mini-batches
+    - consider a weight that gets a gradient of +0.1 on nine mini-batches and a gradient of -0.9 on the tenth mini-batch
+    - want this weight to stay roughly where it is
+- rprop would increment the weight nine times and decrement it once by about the same amount (assuming any adaptation of the step sizes is small on this time-scale)
+    - so the weight would grow a lot
+- is there a way to combine
+    - the robustness of rprop
+    - the efficiency of mini-batches
+    - the effective averaging of gradients over mini-batches
+
+## rmsprop: A mini-batch version of rprop
+- rprop is equivalent to using the gradient but also dividing by the size of gradient
+    - the problem w/ mini-batch rprop is what we divide by a different number for each mini-batch. So why not force the number we divide by to be very similar for adjacent mini-batches?
+- rmsprop: keep a moving average of the squared gradient for each weight
+    - $MeanSquare(w,t)=0.9*MeanSquare(w,t-1)+0.1(\frac{\partial E}{\partial w(t)})^2$
+- Dividing the gradient by $\sqrt{MeanSquare(w,t)}$ makes the learning work much better
+
+## Further developments of rmsprop
+- Combining rmsprop w/ standard momentum
+    - Momemtum does not help as much as it normally does. Needs more investigation
+- Combining rmsprop w/ Nesterov momentum
+    - It works best if the RMS of the recent gradients is used to divide the correction rather than the jump in the direction of accumulated corrections
+- Combining rmsprop w/ adaptive learning rates for each connetion
+    - needs more investigation
+- Other methods related to rmsprop
+    - Yann LeCun's group has a fancy version in "No more pesky learning rates"
+
+## Summary of leaning methods for neural networks
+- For small datasets (e.g. 10,000 cases) or bigger datasets w/o much redundancy, use a full-batch method
+    - Conjugate gradient, LBFGS
+    - adaptive learning rates, rprop
+- For big, redundant datasets use mini-batches
+    - try gradient descent w/ momentum
+    - try rmsprop
+    - try LeCun's latest recipe
+- Why there is no simple recipe:
+    - Neural nets differ a lot:
+        - very deep nets (especially ones w/ narrow bottlenecks)
+        - recurrent nets
+        - wide shallow nets
+    - Tasks differ a lot:
+        - some require very accurate weights, some don't
+        - some have many very rare cases (e.g. words)
+
